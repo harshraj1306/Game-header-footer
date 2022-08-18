@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body translate="no" >
+  <nav class="navbar">
+
+    <div class="logo">HSPL</div>
+  
+    <ul class="nav-links">
+      <input type="checkbox" id="checkbox_toggle" />
+      <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+  
+      <div class="menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/">Company</a></li>
+        <li class="services">
+          <a href="/">Services</a>
+  
+          <ul class="dropdown">
+            <li><a href="/">Web Development</a></li>
+            <li><a href="/">App Development</a></li>
+          </ul>
+        </li>
+        <li><a href="/">Pricing</a></li>
+        <li><a href="/">Contact</a></li>
+      </div>
+    </ul>
+  </nav>
+  
+  <div class="container">
+  <div class="key" data-note="C4"></div>
+  <div class="key" data-note="D4"></div>
+  <div class="key" data-note="E4"></div>
+  <div class="key" data-note="F4"></div>
+  <div class="key" data-note="G4"></div>
+  <div class="key" data-note="A4"></div>
+  <div class="key" data-note="B4"></div>
+  <div class="key" data-note="C5"></div>
+  <div class="center">
+  <div class="body"></div>
+  <div class="chest"></div>
+  <svg class="panda idle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 199.13 148">
+    <path class="ear leftear" d="M47.08 17c-5.92-8-13.91-18.74-30-6.82S9 32.86 15 40.84 32.88 50 41.75 43.38 53 25 47.08 17z"/>
+    <path class="ear rightear" d="M152.91 17c5.92-8 13.91-18.74 30-6.82S191 32.86 185 40.84s-17.89 9.16-26.76 2.54S147 25 152.91 17z"/>
+    
+    <path class="head" d="M198.65 74c5.92 40.44-44.32 74-99 74s-106-33.74-99-74C5.6 45.71 25.72 20.42 56.42 8a115 115 0 0 1 43.23-8 118 118 0 0 1 44.7 8.37c30.21 12.33 50.12 37.04 54.3 65.63z" fill="#fff"/>
+      
+    <path class="feature rightpatch" d="M125.52 42.48c-4.77 7-5.2 18.14-3.42 26C125.78 84.86 140.92 93 156 96.94c9.24 2.43 23 3.35 26.51-8C187 74.62 176.29 55.57 168 44.72c-12-15.56-30.14-20.26-42.48-2.24z"/>
+    <path class="feature righteyepatch" d="M130.58 66.16C128 79 153.79 86.93 154.94 71.29c.87-11.93-21.58-18.91-24.36-5.13z" fill="#fff"/>
+    <ellipse class="eye righteye" cx="142.21" cy="70.5" rx="7.5" ry="1" />
+      
+    <path class="feature leftpatch" d="M73 42.48c4.77 7 5.2 18.14 3.42 26C72.73 84.86 57.59 93 42.49 96.94c-9.23 2.43-23 3.35-26.51-8-4.46-14.34 6.25-33.39 14.57-44.24C42.5 29.16 60.66 24.46 73 42.48z"/>
+    <path class="feature lefteyepatch" d="M67.78 66.16C70.37 79 44.56 86.93 43.42 71.29 42.55 59.36 65 52.38 67.78 66.16z" fill="#fff"/>
+    <ellipse class="eye lefteye" cx="56.15" cy="70.5" rx="7.5" ry="1" />
+    
+    <path class="feature nose" d="M87.65 85.55c0-3.45 2.18-6.55 12-6.55s12 3.1 12 6.55c0 4.36-7.64 12-12 12s-12-6.55-12-12z"/>
+    <ellipse class="mouth feature" cx="99.65" cy="123" rx="10" ry="3"/>
+  </svg>
+  </div>
+</div>
+
+   
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tone/13.3.11/Tone.min.js'></script>
+      <script id="rendered-js" >
+const container = document.querySelector('.container');
+const keys = document.querySelectorAll('.key');
+const panda = document.querySelector('.panda');
+const eyes = document.querySelectorAll('.eye');
+const features = document.querySelectorAll('.feature');
+const leftear = document.querySelector('.leftear');
+const rightear = document.querySelector('.rightear');
+const mouth = document.querySelector('.mouth');
+
+const synth = new Tone.Synth();
+const gain = new Tone.Gain(0.5);
+gain.toMaster();
+synth.connect(gain);
+
+const calcValue = (mouse, width) => {
+  return (mouse / width * limit - limit / 2).toFixed(1);
+};
+
+const setContainerSize = () => {
+  let size = window.innerHeight / 100 * 90;
+  if (size > window.innerWidth) {
+    size = window.innerWidth / 100 * 90;
+  }
+  container.style.height = `${size}px`;
+  container.style.width = `${size}px`;
+};
+
+setContainerSize();
+
+[...keys].forEach(key => {
+  key.addEventListener('mouseover', () => sing(key.dataset.note));
+  key.addEventListener('click', () => sing(key.dataset.note));
+});
+
+let singTimeout;
+const sing = note => {
+  if (singTimeout) clearTimeout(singTimeout);
+
+  synth.triggerAttackRelease(note, '12n');
+
+  mouth.setAttribute('ry', '10');
+
+  singTimeout = setTimeout(() => {
+    mouth.setAttribute('ry', '3');
+  }, 300);
+};
+
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  if (resizeTimeout) window.cancelAnimationFrame(resizeTimeout);
+  resizeTimeout = window.requestAnimationFrame(() => {
+    setContainerSize();
+  });
+}, false);
+
+const limit = 15;
+let timeout;
+window.addEventListener('mousemove', event => {
+  if (timeout) window.cancelAnimationFrame(timeout);
+
+  panda.classList.remove('idle');
+
+  timeout = window.requestAnimationFrame(() => {
+    let xValue = calcValue(event.x, window.innerWidth);
+    let yValue = calcValue(event.y, window.innerHeight);
+
+    [...features].forEach(feature => {
+      feature.style.transform = `translateX(${xValue}px) translateY(${yValue}px)`;
+    });
+
+    [...eyes].forEach(eye => {
+      eye.setAttribute('ry', '7.5');
+      eye.style.transform = `translateX(${xValue * 2}px) translateY(${yValue * 2}px)`;
+    });
+
+    leftear.style.transform = `translateX(${-xValue * 0.7}px) translateY(${-yValue * 0.7}px)`;
+    rightear.style.transform = `translateX(${-xValue * 0.7}px) translateY(${-yValue * 0.7}px)`;
+  });
+}, false);
+    </script>
+
+
+<!-- <footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Our Services</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Affilate Program</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Get Help</h4>
+        <ul>
+          <li><a href="#">FAQS</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Return</a></li>
+          <li><a href="#">Order Status</a></li>
+          <li><a href="#">Payments Options</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Online Shop</h4>
+        <ul>
+          <li><a href="#">Watch</a></li>
+          <li><a href="#">Bag</a></li>
+          <li><a href="#">Shoes</a></li>
+          <li><a href="#">Dress</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <div class="social-links">
+          <a href="https://www.googleadservices.com/pagead/aclk?sa=L&ai=DChcSEwjA1ciL0s_5AhWNCysKHe5WA1AYABAAGgJzZg&ohost=www.google.com&cid=CAESa-D20MZh-lBgFgkaEMhxRjydZi6m5x2Rvv5E4zbHPXf_r4NkOiMwXaUFCycjJvzCZH4J4fKbRydGf8ZlQH7DSLOwATZ2708JtmHjphjED_T87kuw0oZ1Jsned-TDWfdBXipuussgfxePGUy-&sig=AOD64_1ChLorF2jTbn2EkBN2pJ5csow1gg&q&adurl&ved=2ahUKEwiZn8KL0s_5AhWBaGwGHYVkBkwQ0Qx6BAgCEAE"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://twitter.com/login"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.instagram.com/accounts/login/"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/login"><i class="fab fa-linkedin-in"></i></a>
+          
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+
+ </footer>   -->
+
+</body>
+
+</html>
+ 
